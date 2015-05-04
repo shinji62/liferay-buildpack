@@ -138,12 +138,12 @@ module JavaBuildpack
           @logger       = JavaBuildpack::Logging::LoggerFactory.instance.get_logger TomcatInstance
           service       = @application.services.find_service FILTER
 
-          @logger.info{ "--->Service:#{service} found" }
+          @logger.info{ "--->Application seems to be bound to a lf-mysqldb service" }
 
           if service.to_s ==''
-            @logger.warn{'No lf-mysqldb SERVICE FOUND #{portal_ext_properties_file}'}
+            @logger.warn{'No lf-mysqldb SERVICE FOUND'}
           else
-              @logger.info{ "Configuring MySQL Store " }
+              @logger.info{ "Configuring MySQL Store for Liferay" }
 
               file = "#{@droplet.sandbox}/webapps/ROOT/WEB-INF/classes/portal-ext.properties"
 
