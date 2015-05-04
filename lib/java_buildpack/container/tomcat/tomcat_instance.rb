@@ -161,10 +161,10 @@ module JavaBuildpack
                       username      = credentials['username']
                       password      = credentials['password']
 
-                      @logger.debug {"--->  jdbc_url_name:  #{jdbc_url_name} \n"}
-                      @logger.debug {"--->  username:  #{username} \n"}
-                      @logger.debug {"--->  password:  #{password} \n"}
-                      @logger.debug {"--->  host_name:  #{host_name} \n"}
+                      @logger.info {"--->  jdbc_url_name:  #{jdbc_url_name} \n"}
+                      @logger.info {"--->  username:  #{username} \n"}
+                      @logger.info {"--->  password:  #{password} \n"}
+                      @logger.info {"--->  host_name:  #{host_name} \n"}
 
 
                       File.open(file, 'w') do  |file| 
@@ -183,9 +183,9 @@ module JavaBuildpack
 
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
-                        file.puts("ajdbc.default.idleConnectionTestPeriod=60\n")
+                        file.puts("jdbc.default.idleConnectionTestPeriod=60\n")
                         file.puts("jdbc.default.maxIdleTime=3600\n")
-                        file.puts("jdbc.default.maxPoolSize=100\n")
+                        file.puts("jdbc.default.maxPoolSize=20\n")
                         file.puts("jdbc.default.minPoolSize=10\n")
                         file.puts("jdbc.default.numHelperThreads=3\n")
 
