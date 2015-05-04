@@ -122,11 +122,12 @@ module JavaBuildpack
        # The war is presented to the buildpack exploded, so we need to repackage it in a war
       def repackage_portlet_war
 
-        destination = "#{@droplet.sandbox}" + "/deploy/#{@application.details['application_name']}"+ '.war'
+        destination = "#{@droplet.sandbox}/deploy/"
         with_timing "Packaging #{@application.root} to #{destination} " do
 
           FileUtils.mkdir_p "#{@droplet.sandbox}/deploy"
-          shell "zip -r #{destination}   #{@application.root}  -x '.*' -x '*/.*' "
+          shell "cp #{@application.root}/*.war #{destination}  "
+          #shell "unzip -r #{destination}   #{@application.root}  -x '.*' -x '*/.*' "
         end
       end
 
@@ -156,7 +157,6 @@ module JavaBuildpack
 
                       @logger.debug{ "--->credentials:#{credentials} found" }
 
-                      jdbc_url_name = credentials['jdbcUrl']
                       host_name     = credentials['hostname']
                       username      = credentials['username']
                       password      = credentials['password']
@@ -166,7 +166,7 @@ module JavaBuildpack
 
                       jdbc_url      = "jdbc:mysql://#{host_name}:#{port}/#{db_name}"
 
-                      @logger.info {"--->  jdbc_url_name:  #{jdbc_url} \n"}
+                      @logger.debug {"--->  jdbc_url_name:  #{jdbc_url} \n"}
                       @logger.debug {"--->  username:  #{username} \n"}
                       @logger.debug {"--->  password:  #{password} \n"}
                       @logger.debug {"--->  host_name:  #{host_name} \n"}
