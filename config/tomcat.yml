@@ -16,8 +16,8 @@
 # Configuration for the Tomcat container
 ---
 tomcat:
-  version: 8.0.+
-  repository_root: "{default.repository.root}/tomcat"
+  version: 7.0.42
+  repository_root: "https://s3.amazonaws.com/syo-liferay-tomcat/bundle"
 lifecycle_support:
   version: 2.+
   repository_root: "{default.repository.root}/tomcat-lifecycle-support"
