@@ -141,14 +141,14 @@ module JavaBuildpack
           @logger.info{ "--->Application seems to be bound to a lf-mysqldb service" }
 
           if service.to_s ==''
-            @logger.warn{'No lf-mysqldb SERVICE FOUND'}
+            @logger.warn{'--->No lf-mysqldb SERVICE FOUND'}
           else
-              @logger.info{ "Configuring MySQL Store for Liferay" }
+              @logger.info{ "--->Configuring MySQL Store for Liferay" }
 
               file = "#{@droplet.sandbox}/webapps/ROOT/WEB-INF/classes/portal-ext.properties"
 
               if File.exist? (file)
-                  @logger.info { "Portal-ext.properties file already exist, so skipping MySQL configuration" }
+                  @logger.info {"--->Portal-ext.properties file already exist, so skipping MySQL configuration" }
               else
                   with_timing "Creating portal-ext.properties in #{file}" do
 
@@ -177,6 +177,17 @@ module JavaBuildpack
                         file.puts("jdbc.default.username=" + username + "\n")
                         file.puts("jdbc.default.password=" + password + "\n")
 
+                        file.puts("#\n")
+                        file.puts("# Configuration Connextion Pool\n") # This should be configurable through ENV
+                        file.puts("#\n")
+
+                        file.puts("jdbc.default.acquireIncrement=5\n")
+                        file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
+                        file.puts("ajdbc.default.idleConnectionTestPeriod=60\n")
+                        file.puts("jdbc.default.maxIdleTime=3600\n")
+                        file.puts("jdbc.default.maxPoolSize=100\n")
+                        file.puts("jdbc.default.minPoolSize=10\n")
+                        file.puts("jdbc.default.numHelperThreads=3\n")
 
                         file.puts("#\n")
                         file.puts("# Configuration of the auto deploy folder\n")
@@ -185,6 +196,7 @@ module JavaBuildpack
                         file.puts("auto.deploy.dest.dir=${catalina.home}/deploy\n")
                         file.puts("auto.deploy.dir=${catalina.home}/deploy\n")
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
+
                       end
 
                   end # end with_timing
