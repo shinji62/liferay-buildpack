@@ -160,11 +160,16 @@ module JavaBuildpack
                       host_name     = credentials['hostname']
                       username      = credentials['username']
                       password      = credentials['password']
+                      db_name       = credentials['name']
+                      port          = credentials['port']
 
-                      @logger.info {"--->  jdbc_url_name:  #{jdbc_url_name} \n"}
-                      @logger.info {"--->  username:  #{username} \n"}
-                      @logger.info {"--->  password:  #{password} \n"}
-                      @logger.info {"--->  host_name:  #{host_name} \n"}
+
+                      jdbc_url      = "jdbc:mysql://#{host_name}:#{port}/#{db_name}"
+
+                      @logger.info {"--->  jdbc_url_name:  #{jdbc_url} \n"}
+                      @logger.debug {"--->  username:  #{username} \n"}
+                      @logger.debug {"--->  password:  #{password} \n"}
+                      @logger.debug {"--->  host_name:  #{host_name} \n"}
 
 
                       File.open(file, 'w') do  |file| 
@@ -173,7 +178,7 @@ module JavaBuildpack
                         file.puts("#\n")
 
                         file.puts("jdbc.default.driverClassName=com.mysql.jdbc.Driver\n")
-                        file.puts("jdbc.default.url=" + jdbc_url_name + "\n")
+                        file.puts("jdbc.default.url=" + jdbc_url + "\n")
                         file.puts("jdbc.default.username=" + username + "\n")
                         file.puts("jdbc.default.password=" + password + "\n")
 
