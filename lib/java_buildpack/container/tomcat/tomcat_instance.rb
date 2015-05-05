@@ -38,7 +38,7 @@ module JavaBuildpack
       def compile
         download(@version, @uri) { |file| expand file }
 
-        repackage_portlet_war
+        deploy_portlet_wars
 
         configure_mysql_service
 
@@ -120,13 +120,13 @@ module JavaBuildpack
 
 
        # The war is presented to the buildpack exploded, so we need to repackage it in a war
-      def repackage_portlet_war
+      def deploy_portlet_wars
 
         destination = "#{@droplet.sandbox}/deploy/"
         with_timing "Packaging #{@application.root} to #{destination} " do
 
           FileUtils.mkdir_p "#{@droplet.sandbox}/deploy"
-          shell "cp #{@application.root}/*.war #{destination}  "
+          shell "cp #{@application.root}/*.war #{destination} "
           #shell "unzip -r #{destination}   #{@application.root}  -x '.*' -x '*/.*' "
         end
       end
@@ -198,8 +198,8 @@ module JavaBuildpack
                         file.puts("# Configuration of the auto deploy folder\n")
                         file.puts("#\n")
 
-                        file.puts("auto.deploy.dest.dir=${catalina.home}/deploy\n")
-                        file.puts("auto.deploy.dir=${catalina.home}/deploy\n")
+                        file.puts("auto.deploy.dest.dir=${catalina.home}/webapps\n")
+                        #file.puts("auto.deploy.dir=${catalina.home}/deploy\n")
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
 
                       end
