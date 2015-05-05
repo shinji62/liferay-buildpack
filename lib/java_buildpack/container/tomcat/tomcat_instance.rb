@@ -198,7 +198,6 @@ module JavaBuildpack
                         file.puts("#\n")
 
                         file.puts("auto.deploy.dest.dir=${catalina.home}/webapps\n")
-                        #file.puts("auto.deploy.dir=${catalina.home}/deploy\n")
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
 
                       end
