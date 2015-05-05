@@ -187,7 +187,7 @@ module JavaBuildpack
 
                         #Check if the user specify a maximum pool size
                         user_max_pool = ENV['liferay.max.pool.size']
-                        user_max_pool2 = @java_opts.key('liferay.max.pool.size')
+                        user_max_pool2 = @java_opts
                         user_max_pool3 =@java_opts['liferay.max.pool.size']
 
 
