@@ -68,6 +68,8 @@ module JavaBuildpack
 
       private_constant :TOMCAT_8
 
+
+
       def configure_jasper
         return unless @version < TOMCAT_8
 
@@ -186,14 +188,9 @@ module JavaBuildpack
                         file.puts("#\n")
 
                         #Check if the user specify a maximum pool size
-                        user_max_pool = ENV['liferay.max.pool.size']
-                        user_max_pool2 = @java_opts
-                       # user_max_pool3 =@java_opts['liferay.max.pool.size']
-
-
+                        user_max_pool = ENV["LIFERAY_MAX_POOL_SIZE"]
+                        puts "Current LIFERAY_MAX_POOL_SIZE value is #{ENV['LIFERAY_MAX_POOL_SIZE']}"
                         @logger.info {"--->  user_max_pool:  #{user_max_pool} \n"}
-                        @logger.info {"--->  user_max_pool2:  #{user_max_pool2} \n"}
-                       # @logger.info {"--->  user_max_pool3:  #{user_max_pool3} \n"}
 
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
