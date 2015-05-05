@@ -187,8 +187,13 @@ module JavaBuildpack
 
                         #Check if the user specify a maximum pool size
                         user_max_pool = ENV['liferay.max.pool.size']
+                        user_max_pool2 = @java_opts.key?('liferay.max.pool.size')
+                        user_max_pool3 =@java_opts['liferay.max.pool.size']
+
 
                         @logger.info {"--->  user_max_pool:  #{user_max_pool} \n"}
+                        @logger.info {"--->  user_max_pool2:  #{user_max_pool2} \n"}
+                        @logger.info {"--->  user_max_pool3:  #{user_max_pool3} \n"}
 
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
