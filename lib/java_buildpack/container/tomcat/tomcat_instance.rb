@@ -185,6 +185,11 @@ module JavaBuildpack
                         file.puts("# Configuration Connextion Pool\n") # This should be configurable through ENV
                         file.puts("#\n")
 
+                        #Check if the user specify a maximum pool size
+                        user_max_pool = ENV['liferay.max.pool.size']
+
+                        @logger.info {"--->  user_max_pool:  #{user_max_pool} \n"}
+
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
                         file.puts("jdbc.default.idleConnectionTestPeriod=60\n")
@@ -201,7 +206,6 @@ module JavaBuildpack
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
 
                       end
-
                   end # end with_timing
               end
         end # End else
