@@ -129,7 +129,6 @@ module JavaBuildpack
 
           FileUtils.mkdir_p "#{@droplet.sandbox}/deploy"
           shell "cp #{@application.root}/*.war #{destination} "
-          #shell "unzip -r #{destination}   #{@application.root}  -x '.*' -x '*/.*' "
         end
       end
 
@@ -185,18 +184,26 @@ module JavaBuildpack
 
                         file.puts("#\n")
                         file.puts("# Configuration Connextion Pool\n") # This should be configurable through ENV
-                        file.puts("#\n")
+                        file.puts("#\n")             
 
-                        #Check if the user specify a maximum pool size
-                        user_max_pool = ENV["LIFERAY_MAX_POOL_SIZE"]
-                        puts "Current LIFERAY_MAX_POOL_SIZE value is #{ENV['LIFERAY_MAX_POOL_SIZE']}"
-                        @logger.info {"--->  user_max_pool:  #{user_max_pool} \n"}
+                      
 
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
                         file.puts("jdbc.default.idleConnectionTestPeriod=60\n")
                         file.puts("jdbc.default.maxIdleTime=3600\n")
-                        file.puts("jdbc.default.maxPoolSize=100\n")
+
+                        #Check if the user specify a maximum pool size
+                        user_max_pool = ENV["LIFERAY_MAX_POOL_SIZE"]
+
+                        if user_max_pool ==""
+                          file.puts("jdbc.default.maxPoolSize=100\n") #This is the default value from Liferay
+                          @logger.info {"--->  No value set for LIFERAY_MAX_POOL_SIZE so taking the default (100) \n"}
+                        else
+                          file.puts("jdbc.default.maxPoolSize=" + user_max_pool + "\n")
+                          @logger.info {"--->  LIFERAY_MAX_POOL_SIZE:  #{user_max_pool} \n"}
+                        end
+                        
                         file.puts("jdbc.default.minPoolSize=10\n")
                         file.puts("jdbc.default.numHelperThreads=3\n")
 
@@ -206,7 +213,6 @@ module JavaBuildpack
 
                         file.puts("auto.deploy.dest.dir=${catalina.home}/webapps\n")
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
-
                       end
                   end # end with_timing
               end
