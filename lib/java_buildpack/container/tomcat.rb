@@ -65,9 +65,7 @@ module JavaBuildpack
       private
 
       def web_inf?
-        print "INSIDE Tomcat::web_inf"
-
-        #(@application.root + 'WEB-INF').exist?
+        #The package should only contain wars
         (@application.root + '*.war').glob.any?
       end
 
