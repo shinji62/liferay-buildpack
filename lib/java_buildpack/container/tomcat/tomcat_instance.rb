@@ -133,7 +133,6 @@ module JavaBuildpack
 
       # In this method we check if the application is bound to a service. If that is the case then we create the portal-ext.properties
       # and store it in Liferay Portal classes directory.
-
       def configure_mysql_service
 
           @logger       = JavaBuildpack::Logging::LoggerFactory.instance.get_logger TomcatInstance
@@ -190,7 +189,7 @@ module JavaBuildpack
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
                         file.puts("jdbc.default.idleConnectionTestPeriod=60\n")
                         file.puts("jdbc.default.maxIdleTime=3600\n")
-                        file.puts("jdbc.default.maxPoolSize=20\n")
+                        file.puts("jdbc.default.maxPoolSize=100\n")
                         file.puts("jdbc.default.minPoolSize=10\n")
                         file.puts("jdbc.default.numHelperThreads=3\n")
 
