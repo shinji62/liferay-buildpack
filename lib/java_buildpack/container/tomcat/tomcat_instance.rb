@@ -38,8 +38,10 @@ module JavaBuildpack
       def compile
         download(@version, @uri) { |file| expand file }
 
+        # Get the Portlets WAR and move them to auto deploy folder
         deploy_portlet_wars
 
+        #Configure any bound MySQL DB
         configure_mysql_service
 
         @droplet.additional_libraries << tomcat_datasource_jar if tomcat_datasource_jar.exist?
@@ -154,9 +156,8 @@ module JavaBuildpack
                   with_timing "Creating portal-ext.properties in #{file}" do
 
                       credentials   = service['credentials']
-
                       @logger.debug{ "--->credentials:#{credentials} found" }
-
+                      
                       host_name     = credentials['hostname']
                       username      = credentials['username']
                       password      = credentials['password']
@@ -165,11 +166,8 @@ module JavaBuildpack
 
 
                       jdbc_url      = "jdbc:mysql://#{host_name}:#{port}/#{db_name}"
-
                       @logger.debug {"--->  jdbc_url_name:  #{jdbc_url} \n"}
                       @logger.debug {"--->  username:  #{username} \n"}
-                      @logger.debug {"--->  password:  #{password} \n"}
-                      @logger.debug {"--->  host_name:  #{host_name} \n"}
 
 
                       File.open(file, 'w') do  |file| 
@@ -184,10 +182,7 @@ module JavaBuildpack
 
                         file.puts("#\n")
                         file.puts("# Configuration Connextion Pool\n") # This should be configurable through ENV
-                        file.puts("#\n")             
-
-                      
-
+                        file.puts("#\n")
                         file.puts("jdbc.default.acquireIncrement=5\n")
                         file.puts("jdbc.default.connectionCustomizerClassName=com.liferay.portal.dao.jdbc.pool.c3p0.PortalConnectionCustomizer\n")
                         file.puts("jdbc.default.idleConnectionTestPeriod=60\n")
@@ -195,7 +190,6 @@ module JavaBuildpack
 
                         #Check if the user specify a maximum pool size
                         user_max_pool = ENV["LIFERAY_MAX_POOL_SIZE"]
-
                         if user_max_pool ==""
                           file.puts("jdbc.default.maxPoolSize=100\n") #This is the default value from Liferay
                           @logger.info {"--->  No value set for LIFERAY_MAX_POOL_SIZE so taking the default (100) \n"}
@@ -203,14 +197,13 @@ module JavaBuildpack
                           file.puts("jdbc.default.maxPoolSize=" + user_max_pool + "\n")
                           @logger.info {"--->  LIFERAY_MAX_POOL_SIZE:  #{user_max_pool} \n"}
                         end
-                        
                         file.puts("jdbc.default.minPoolSize=10\n")
                         file.puts("jdbc.default.numHelperThreads=3\n")
+
 
                         file.puts("#\n")
                         file.puts("# Configuration of the auto deploy folder\n")
                         file.puts("#\n")
-
                         file.puts("auto.deploy.dest.dir=${catalina.home}/webapps\n")
                         file.puts("auto.deploy.deploy.dir=${catalina.home}/deploy\n")
                       end
